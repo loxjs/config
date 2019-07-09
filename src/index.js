@@ -1,6 +1,7 @@
 
 const get = require('lodash/get')
 const set = require('lodash/set')
+const isPlainObject = require('lodash/isPlainObject')
 const mergeWith = require('lodash/mergeWith')
 
 
@@ -25,6 +26,14 @@ const Config = class {
      */
     set (key, value) {
         set(this._config, key, value)
+    }
+
+    bulkSet (obj) {
+        if (isPlainObject(obj)) {
+            for (const key of Object.keys(obj)) {
+                this.set(key, obj[key])
+            }
+        }
     }
 
     /**
