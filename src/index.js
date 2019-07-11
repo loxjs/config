@@ -2,6 +2,7 @@
 const get = require('lodash/get')
 const set = require('lodash/set')
 const isPlainObject = require('lodash/isPlainObject')
+const isUndefined = require('lodash/isUndefined')
 const mergeWith = require('lodash/mergeWith')
 
 
@@ -52,6 +53,40 @@ const Config = class {
      */
     get (key, defaultValue) {
         return get(this._config, key, defaultValue)
+    }
+
+    /**
+     * This API is much like `get()`, the difference is method `get()` will not assign `defaultValue` to `key`,
+     * yet when `key`'s value is `undefined` and `defaultValue` is not `undefined`,
+     * method `geset()` will assign it to `key`
+     * @param {String} key
+     * @param {Any} defaultValue
+     */
+    geset (key, defaultValue) {
+        const value = get(this._config, key)
+        if (isUndefined(value) && !isUndefined(defaultValue)) {
+            this.set(key, defaultValue)
+            return defaultValue
+        }
+        return value
+    }
+
+    /**
+     * Used to determine if `key`'s value and `value` are equal
+     * @param {String} key
+     * @param {Any} value
+     */
+    eq (key, value) {
+        return get(this._config, key) === value
+    }
+
+    /**
+     * Used to determine if `key`'s value and `value` are not equal
+     * @param {String} key
+     * @param {Any} value
+     */
+    ne (key, value) {
+        return get(this._config, key) !== value
     }
 
     /**
